@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class listwisata extends AppCompatActivity {
-    private final String JSON_url= "http://127.0.0.1/kotajalur/getdatawisata.php";
+    private final String JSON_url= "http://10.126.167.122/kotajalur/getdatawisata.php";
    RecyclerView mRecyclerview;
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager mManager;
