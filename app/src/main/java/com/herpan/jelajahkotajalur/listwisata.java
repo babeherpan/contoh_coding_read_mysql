@@ -25,6 +25,7 @@ public class listwisata extends AppCompatActivity {
     private final String JSON_url= "http://127.0.0.1/kotajalur/getdatawisata.php";
    RecyclerView mRecyclerview;
     RecyclerView.Adapter mAdapter;
+    RecyclerView.LayoutManager mManager;
     RequestQueue mReques;
     List<modellistwisata> listitem;
 
@@ -35,13 +36,12 @@ public class listwisata extends AppCompatActivity {
         setContentView(R.layout.activity_listwisata);
 
         mRecyclerview = (RecyclerView) findViewById(R.id.recyclerview);
-        mRecyclerview.setHasFixedSize(true);
         mReques = Volley.newRequestQueue(getApplicationContext());
         listitem = new ArrayList<>();
 
         request();
 
-
+        mManager = new LinearLayoutManager(listwisata.this, LinearLayoutManager.VERTICAL, false);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new adapterlistwisata(listitem,listwisata.this);
         mRecyclerview.setAdapter(mAdapter);
