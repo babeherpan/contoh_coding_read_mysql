@@ -7,9 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
@@ -21,13 +25,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class listwisata extends AppCompatActivity {
-    private final String JSON_url= "http://10.126.167.122/kotajalur/getdatawisata.php";
-   RecyclerView mRecyclerview;
-    RecyclerView.Adapter mAdapter;
-    RecyclerView.LayoutManager mManager;
-    RequestQueue mReques;
-    List<modellistwisata> listitem;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager LayoutManager;
+    private List<Wisata> wisata;
+    private Adapter adapter;
+    private Apiinterface apiinterface;
+    ProgressBar progressBar;
+
 
 
     @Override
@@ -35,55 +45,36 @@ public class listwisata extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listwisata);
 
-        mRecyclerview = (RecyclerView) findViewById(R.id.recyclerview);
-        mReques = Volley.newRequestQueue(getApplicationContext());
-        listitem = new ArrayList<>();
+        progressBar = findViewById(R.id.progess);
+        recyclerView = findViewById(R.id.recyclerview);
+        LayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(LayoutManager);
+        recyclerView.setHasFixedSize(true);
 
-        request();
-
-        mManager = new LinearLayoutManager(listwisata.this, LinearLayoutManager.VERTICAL, false);
-        mRecyclerview.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new adapterlistwisata(listitem,listwisata.this);
-        mRecyclerview.setAdapter(mAdapter);
-
-
+        fetchWisata("");
     }
 
+    public void fetchWisata(String key){
+        apiinterface = ApiClient.getApiClient().create(Apiinterface.class);
+        Call<List<Wisata>> call = apiinterface.getWisata(key);
 
-    private void request(){
-        JsonArrayRequest requestImage = new JsonArrayRequest(Request.Method.POST, JSON_url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d("JSONResponse",response.toString());
-                        for(int i=0; i < response.length(); i++){
-                            try{
-                                JSONObject data =response.getJSONObject(i);
-                                modellistwisata model = new modellistwisata();
-                                model.setId_wisata(data.getString("id_wisata"));
-                                model.setNama(data.getString("nama"));
-                                model.setGambar(data.getString("gambar"));
-                                model.setDeskripsi(data.getString("deskripsi"));
-                                model.setLatitude(data.getString("latitude"));
-                                model.setLongitude(data.getString("longitude"));
+        call.enqueue(new Callback<List<Wisata>>() {
+            @Override
+            public void onResponse(Call<List<Wisata>> call, Response<List<Wisata>> response) {
+                progressBar.setVisibility(View.GONE);
+                wisata = response.body();
+                adapter = (Adapter) new AdapterWisata(wisata,listwisata.this);
+                recyclerView.setAdapter((RecyclerView.Adapter) adapter);
+                ((RecyclerView.Adapter) adapter).notifyDataSetChanged();
 
-                                listitem.add(model);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            mAdapter.notifyDataSetChanged();
-                        }
+            }
 
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("ERRORRequest" , "Error: " + error.getMessage());
+            @Override
+            public void onFailure(Call<List<Wisata>> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(listwisata.this,"Error on:" + t.toString(),Toast.LENGTH_SHORT).show();
 
-                    }
-                });
-
-        mReques.add(requestImage);
+            }
+        });
     }
 }
