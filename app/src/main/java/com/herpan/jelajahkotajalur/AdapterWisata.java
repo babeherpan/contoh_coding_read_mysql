@@ -28,14 +28,14 @@ public class AdapterWisata extends RecyclerView.Adapter<AdapterWisata.MyViewHold
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row_wisata, parent,false);
 
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder( MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.nama.setText(wisata.get(position).getNama());
 
         Glide.with(context).load(wisata.get(position).getGambar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -51,7 +51,7 @@ public class AdapterWisata extends RecyclerView.Adapter<AdapterWisata.MyViewHold
         ImageView img;
         TextView nama;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(View itemView) {
             super(itemView);
 
             img = (ImageView) itemView.findViewById(R.id.img_wisata);

@@ -8,5 +8,5 @@ import retrofit2.http.Query;
 
 public interface Apiinterface {
     @GET("getwisata.php")
-    Call<List<Wisata>> getWisata (@Query("key") String ketword);
+    Call<List<Wisata>> getwisata (@Query("key") String keyword);
 }

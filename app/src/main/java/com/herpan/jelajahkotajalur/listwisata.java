@@ -34,8 +34,8 @@ public class listwisata extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager LayoutManager;
     private List<Wisata> wisata;
-    private Adapter adapter;
-    private Apiinterface apiinterface;
+    private AdapterWisata adapter;
+    private Apiinterface apiInterface;
     ProgressBar progressBar;
 
 
@@ -55,17 +55,17 @@ public class listwisata extends AppCompatActivity {
     }
 
     public void fetchWisata(String key){
-        apiinterface = ApiClient.getApiClient().create(Apiinterface.class);
-        Call<List<Wisata>> call = apiinterface.getWisata(key);
+        apiInterface = ApiClient.getApiClient().create(Apiinterface.class);
+        Call<List<Wisata>> call = apiInterface.getwisata(key);
 
         call.enqueue(new Callback<List<Wisata>>() {
             @Override
             public void onResponse(Call<List<Wisata>> call, Response<List<Wisata>> response) {
                 progressBar.setVisibility(View.GONE);
                 wisata = response.body();
-                adapter = (Adapter) new AdapterWisata(wisata,listwisata.this);
-                recyclerView.setAdapter((RecyclerView.Adapter) adapter);
-                ((RecyclerView.Adapter) adapter).notifyDataSetChanged();
+                adapter = new AdapterWisata(wisata,listwisata.this);
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
 
             }
 
