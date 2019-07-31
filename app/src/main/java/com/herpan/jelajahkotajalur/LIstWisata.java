@@ -4,23 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
+
 import android.os.Bundle;
+
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
+
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +20,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class listwisata extends AppCompatActivity {
+public class LIstWisata extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager LayoutManager;
+    private RecyclerView.LayoutManager layoutManager;
     private List<Wisata> wisata;
     private AdapterWisata adapter;
     private Apiinterface apiInterface;
+
     ProgressBar progressBar;
 
 
@@ -47,8 +39,12 @@ public class listwisata extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progess);
         recyclerView = findViewById(R.id.recyclerview);
-        LayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(LayoutManager);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        wisata = new ArrayList<>();
+        adapter  = new AdapterWisata(wisata, LIstWisata.this);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         recyclerView.setHasFixedSize(true);
 
         fetchWisata("");
@@ -63,18 +59,19 @@ public class listwisata extends AppCompatActivity {
             public void onResponse(Call<List<Wisata>> call, Response<List<Wisata>> response) {
                 progressBar.setVisibility(View.GONE);
                 wisata = response.body();
-                adapter = new AdapterWisata(wisata,listwisata.this);
-                recyclerView.setAdapter(adapter);
+                Log.e("respon dari server", "code:" +response.code()+"Jumlah wisata:"+ wisata.size());
                 adapter.notifyDataSetChanged();
-
             }
+
 
             @Override
             public void onFailure(Call<List<Wisata>> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(listwisata.this,"Error on:" + t.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(LIstWisata.this,"Error on:" + t.toString(),Toast.LENGTH_SHORT).show();
 
             }
+
         });
+
     }
 }

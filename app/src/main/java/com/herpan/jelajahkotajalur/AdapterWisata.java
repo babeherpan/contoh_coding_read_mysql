@@ -2,6 +2,7 @@ package com.herpan.jelajahkotajalur;
 
 import android.content.Context;
 import android.nfc.TagLostException;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,7 @@ import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -28,14 +29,14 @@ public class AdapterWisata extends RecyclerView.Adapter<AdapterWisata.MyViewHold
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterWisata.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row_wisata, parent,false);
-
-        return new MyViewHolder(view);
+        MyViewHolder holder = new MyViewHolder(view);
+        return holder;
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(AdapterWisata.MyViewHolder holder, int position) {
         holder.nama.setText(wisata.get(position).getNama());
 
         Glide.with(context).load(wisata.get(position).getGambar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -45,6 +46,7 @@ public class AdapterWisata extends RecyclerView.Adapter<AdapterWisata.MyViewHold
 
     @Override
     public int getItemCount() {
+
         return wisata.size();
     }
     public static class  MyViewHolder extends RecyclerView.ViewHolder{

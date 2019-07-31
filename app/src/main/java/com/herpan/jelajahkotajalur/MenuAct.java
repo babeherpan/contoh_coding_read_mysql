@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class MenuAct extends AppCompatActivity {
@@ -22,7 +21,7 @@ public class MenuAct extends AppCompatActivity {
         btn_wst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent wisata = new Intent(MenuAct.this,listwisata.class);
+                Intent wisata = new Intent(MenuAct.this, LIstWisata.class);
                 startActivity(wisata);
             }
         });
